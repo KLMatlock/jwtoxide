@@ -97,7 +97,7 @@ class ValidationOptions:
         sub: Optional[str] = None,
         verify_signature=True,
         required_spec_claims: set[str] = {"exp", "iat", "nbf"},
-        leeway=60,
+        leeway_seconds=60,
         validate_exp=True,
         validate_nbf=True,
         validate_aud=True,

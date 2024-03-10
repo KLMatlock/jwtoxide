@@ -146,7 +146,7 @@ def test_expired_leeway():
         "name": "John Doe",
     }
     encoded_jwt = jwt.encode(data, "secret", algorithm="HS256")
-    validation_options = ValidationOptions(aud=None, iss=None, algorithms=["HS256"])
+    validation_options = ValidationOptions(aud=None, iss=None, leeway_seconds = 60, algorithms=["HS256"])
 
     decode(encoded_jwt, "secret", validation_options=validation_options)
 

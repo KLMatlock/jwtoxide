@@ -58,7 +58,7 @@ impl ValidationOptions {
         iss,
         sub = None,
         required_spec_claims = None,
-        leeway = 60,
+        leeway_seconds = 5,
         validate_exp = true,
         validate_nbf = true,
         validate_aud = true,
@@ -71,7 +71,7 @@ impl ValidationOptions {
         iss: Option<HashSet<String>>,
         sub: Option<String>,
         required_spec_claims: Option<HashSet<String>>,
-        leeway: u64,
+        leeway_seconds: u64,
         validate_exp: bool,
         validate_nbf: bool,
         validate_aud: bool,
@@ -98,7 +98,7 @@ impl ValidationOptions {
             }
         };
         validation.required_spec_claims = req_spec_claims;
-        validation.leeway = leeway;
+        validation.leeway = leeway_seconds;
         validation.validate_exp = validate_exp;
         validation.validate_nbf = validate_nbf;
         validation.validate_aud = validate_aud;
