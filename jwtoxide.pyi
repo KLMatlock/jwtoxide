@@ -115,34 +115,34 @@ class ValidationOptions:
     ) -> None: ...
 
 class InvalidTokenError(Exception):
-    """Base exception when a token fails validation."""
+    ...
 
 class DecodeError(InvalidTokenError):
-    """Raised when a token cannot be decoded because it failed validation"""
+    ...
 
 class InvalidSignatureError(DecodeError):
-    "Raised when a token's signature doesn't match the one provided as part of the token."
+    ...
 
 class MissingRequiredClaimError(InvalidTokenError):
-    """Raised when a token is missing a required claim."""
+    ...
 
 class ExpiredSignatureError(InvalidTokenError):
-    """Raised when a token's signature doesn't match the one provided as part of the token."""
+    ...
 
 class InvalidIssuerError(InvalidTokenError):
-    """Raised when a token's `iss` claim does not match the expected issuer."""
+    ...
 
 class InvalidAudienceError(InvalidTokenError):
-    """Raised when a token's `aud` claim does not match one of the expected audience values."""
+    ...
 
 class InvalidSubjectError(InvalidTokenError):
-    """Raised when a token's `sub` claim does not match the expected subject."""
+    ...
 
 class ImmatureSignatureError(InvalidTokenError):
-    """Raised when a token's `nbf` claim represents a time in the future."""
+    ...
 
 class InvalidAlgorithmError(InvalidTokenError):
-    """Raised when a token's `alg` claim does not algorithm set to validate."""
+    ...
 
 class Jwk:
     @classmethod
