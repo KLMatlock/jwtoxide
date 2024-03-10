@@ -121,14 +121,13 @@ fn get_decoding_key(key: &PyAny) -> Result<DecodingKey, PyErr> {
     }
 }
 
-
 /// Encode a set of claims into a Json Web Token (JWT).
 ///
 /// Args:  
-///    payload dict[str, JsonType]: 
+///    payload dict[str, JsonType]:
 ///        The claims to encode.
 ///
-///    key (EncodingKey | str): 
+///    key (EncodingKey | str):
 ///        The key to use for encoding. This can be an EncodingKey object or a string representing a utf-8 encoded secret key.
 ///    
 ///    algorithm (str):
@@ -187,7 +186,6 @@ fn parse_decode_error(error: Error) -> PyErr {
     }
 }
 
-
 /// Decode a JWT using the provided keys.
 ///
 /// :param token: The JWT to decode.
@@ -218,6 +216,7 @@ fn py_decode(
 /// PyO3 Bindings to the jsonwebtoken library.
 #[pymodule]
 fn jwtoxide(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add("InvalidTokenError", _py.get_type::<InvalidTokenError>())?;
     m.add("DecodeError", _py.get_type::<DecodeError>())?;
     m.add(

@@ -7,12 +7,12 @@ def encode(
     key: EncodingKey | str,
     algorithm: str = "HS256",
 ) -> str: ...
-
 def decode(
     token: str,
     key: EncodingKey | str,
     validation_options: ValidationOptions,
 ) -> dict[str, JsonType]: ...
+
 """
 Decode a JWT using the provided keys.
 

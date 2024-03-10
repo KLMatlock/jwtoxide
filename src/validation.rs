@@ -15,23 +15,22 @@ const DEFAULT_ALGORITHMS: [Algorithm; 9] = [
     Algorithm::EdDSA,
 ];
 
- 
 /// Sets the validation options when decoding a JWT
-/// 
-/// :param aud: Optional; The required audience claim, if set to None then no checking 
+///
+/// :param aud: Optional; The required audience claim, if set to None then no checking
 ///     is performed.
 /// :type aud: set[str], optional
-/// :param iss: Optional; The required issuer, typically the URL of an oauth provider, 
+/// :param iss: Optional; The required issuer, typically the URL of an oauth provider,
 ///     if set to None then no checking is performed.
 /// :type iss: set[str], optional
-/// :param sub: Optional; The required subject claim, if set to None then no checking 
+/// :param sub: Optional; The required subject claim, if set to None then no checking
 ///     is performed. Defaults to None.
 /// :type sub: str, optional
-/// :param required_spec_claims: The claims that are required to be present in the JWT. 
-///     Note only checks for presences of the claim, does not validate the value. 
+/// :param required_spec_claims: The claims that are required to be present in the JWT.
+///     Note only checks for presences of the claim, does not validate the value.
 ///     Defaults to {"exp", "iat", "nbf"}.
 /// :type required_spec_claims: set[str], optional
-/// :param leeway: The leeway in seconds for time based claims in second. 
+/// :param leeway: The leeway in seconds for time based claims in second.
 ///     Defaults to 60 seconds.
 /// :type leeway: int, optional
 /// :param validate_exp: Whether to validate the expiration time claim, defaults to True.
@@ -40,10 +39,10 @@ const DEFAULT_ALGORITHMS: [Algorithm; 9] = [
 /// :type validate_nbf: bool, optional
 /// :param validate_aud: Whether to validate the audience claim, defaults to True.
 /// :type validate_aud: bool, optional
-/// :param algorithms: The algorithms that can be used, defaults to 
+/// :param algorithms: The algorithms that can be used, defaults to
 ///     {"RS256","RS384","RS512","ES256","ES384","PS256","PS384","PS512","EdDSA"}.
 /// :type algorithms: list[str], optional
-/// :param verify_signature: Whether to verify the signature, very dangerous to turn 
+/// :param verify_signature: Whether to verify the signature, very dangerous to turn
 ///     this off. Defaults to True.
 /// :type verify_signature: bool, optional
 #[pyclass]
