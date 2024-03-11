@@ -46,7 +46,7 @@ jobs:
         env:
           CIBW_BUILD: 'cp3${{ matrix.python-minor-version }}-*'
           # rust doesn't seem to be available for musl linux on i686
-          CIBW_SKIP: '*-musllinux_i686'
+          CIBW_SKIP: '*-musllinux_i686 *_ppc64le'
         #   # we build for "alt_arch_name" if it exists, else 'auto'
           CIBW_ARCHS: 'all'
           CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
