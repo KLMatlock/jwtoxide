@@ -123,21 +123,15 @@ fn get_decoding_key(key: &PyAny) -> Result<DecodingKey, PyErr> {
 
 /// Encode a set of claims into a Json Web Token (JWT).
 ///
-/// Args:  
-///    payload dict[str, JsonType]:
-///        The claims to encode.
-///
-///    key (EncodingKey | str):
-///        The key to use for encoding. This can be an EncodingKey object or a string representing a utf-8 encoded secret key.
-///    
-///    algorithm (str):
-///        The algorithm to use for encoding the token, by default uses "HS256".
-///
-/// Returns:  
-///    str: The encoded and signed JWT.  
-///
-/// Raises:  
-///     Exception: If an error occurs during encoding.
+/// :param payload: The claims to encode, must be json serializable.
+/// :type payload: dict
+/// :param key: The key to use for signing. This can be an EncodingKey or a string representing an utf-8 encoded secret key.
+/// :type key: Union[EncodingKey, str]
+/// :param algorithm: The algorithm to use for signing the token, by default uses "HS256".
+/// :type algorithm: str
+/// :return: The encoded token.
+/// :rtype: str
+/// :raises:  Exception: If an error occurs during encoding
 #[pyfunction]
 #[pyo3(signature = (payload, key, algorithm="HS256", header=None))]
 fn encode(
@@ -190,13 +184,13 @@ fn parse_decode_error(error: Error) -> PyErr {
 ///
 /// :param token: The JWT to decode.
 /// :type token: str
-/// :param key: The key to use for decoding. This can be an EncodingKey or a string representing an utf-8 encoded secret key.
-/// :type key: Union[EncodingKey, str]
+/// :param key: The key to use for decoding. This can be an DecodingKey or a string representing an utf-8 encoded secret key.
+/// :type key: Union[DecodingKey, str]
 /// :param validation_options: The options for token validation.
 /// :type validation_options: ValidationOptions
 /// :return: The decoded claims.
 /// :rtype: dict
-/// :raises: InvalidTokenError: If the token fails validation.
+/// :raises: :class:`InvalidTokenError`: If the token fails validation.
 #[pyfunction]
 #[pyo3(name = "decode")]
 fn py_decode(

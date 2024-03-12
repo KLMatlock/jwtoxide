@@ -19,5 +19,5 @@ strip = true
 
 [project.optional-dependencies]
 test = ["pytest", "pyjwt>=2.0.0"]
-docs = ["mkdocs", "mkdocstrings[python]"]
+docs = ["sphinx", "autodoc", "sphinx-rtd-theme"]
 lint = ["ruff"]

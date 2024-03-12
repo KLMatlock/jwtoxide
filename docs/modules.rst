@@ -1,3 +1,4 @@
+=================
 API Documentation
 =================
 
@@ -9,6 +10,8 @@ API Documentation
    .. autoclass:: ValidationOptions
       :members:
 
+   .. autoclass:: DecodingKey
+      :members:
 
 Exceptions
 ==========

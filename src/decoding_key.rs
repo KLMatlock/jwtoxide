@@ -2,6 +2,10 @@ use crate::jwk::Jwk;
 use pyo3::prelude::*;
 use pyo3::types::PyType;
 
+/// A key for validating a JWT signature.
+///
+/// Used by being passed into the `decode` function.
+///
 #[derive(Clone)]
 #[pyclass]
 pub struct DecodingKey {

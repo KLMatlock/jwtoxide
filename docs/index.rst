@@ -12,6 +12,7 @@ Welcome to jwtoxide's documentation!
 
    readme
    modules
+   example
 
 
 

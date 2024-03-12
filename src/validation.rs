@@ -30,7 +30,7 @@ const DEFAULT_ALGORITHMS: [Algorithm; 9] = [
 ///     Note only checks for presences of the claim, does not validate the value.
 ///     Defaults to {"exp", "iat", "nbf"}.
 /// :type required_spec_claims: set[str], optional
-/// :param leeway_seconds: The leeway in seconds for time based claims in second.
+/// :param leeway_seconds: The leeway for validating time based claims in second.
 ///     Defaults to 60 seconds.
 /// :type leeway_seconds: int, optional
 /// :param validate_exp: Whether to validate the expiration time claim, defaults to True.
