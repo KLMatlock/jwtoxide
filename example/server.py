@@ -5,7 +5,8 @@ Once started, log in to the Keycloak admin console at http://localhost:8080
 using the username `admin` and password `admin`. Then, create a new confidential
 client called "fastapi" and set the "Valid Redirect URIs" to "http://localhost:8000/*".
 
-Afterwards, start this script, go to localhost:8000/docs.
+Afterwards, install both FastAPI and httpx using pip. Then start this script, 
+go to localhost:8000/docs to see the authenticated endpoints.
 """
 
 from typing import Annotated

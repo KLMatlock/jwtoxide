@@ -1,4 +1,4 @@
-from typing import Optional, Union, Literal
+from typing import Optional, Union
 
 JsonType = Union[None, int, str, bool, list[JsonType], dict[str, JsonType]]
 
@@ -13,29 +13,8 @@ def decode(
     validation_options: ValidationOptions,
 ) -> dict[str, JsonType]: ...
 
-"""
-Decode a JWT using the provided keys.
-
-Args:
-    token (str): 
-        The JWT to decode.
-
-    key (EncodingKey | str): 
-        The key to use for decoding. 
-        This can be an EncodingKey or a string representing an utf-8 encoded secret key.
-
-    validation_options (ValidationOptions): 
-        The options for token validation.
-
-Returns:
-    dict: The decoded claims.
-
-Raises:
-    InvalidTokenError: If the token fails validation.
-"""
 
 class DecodingKey(object):
-    """A key used for decoding JWTs."""
 
     @classmethod
     def from_secret(self, content: bytes) -> "DecodingKey": ...
@@ -70,7 +49,6 @@ class CommonParameters(object):
     ) -> None: ...
 
 class EncodingKey(object):
-    """A key used for encoding JWTs."""
 
     @classmethod
     def from_secret(self, content: bytes) -> "EncodingKey": ...
@@ -147,75 +125,19 @@ class InvalidAlgorithmError(InvalidTokenError):
 class Jwk:
     @classmethod
     def from_json(cls, content: str) -> "Jwk": ...
-    """
-    Create a JWK from a JSON string.
-
-    Args:  
-        content (str): A JSON string representing a JWK.  
-
-    Returns:  
-        Jwk: A Jwk object.  
-
-    Raises:  
-        ValueError: If the input string is not a valid JSON or does not represent a valid JWK.  
-
-    Example:  
-        >>> jwk_json = '{"kty":"RSA","n":"0vx7...","e":"AQAB"}'  
-        >>> jwk = Jwk.from_json(jwk_json)  
-    """
 
     def __str__(self) -> str: ...
 
 class JwkSet:
     @classmethod
     def from_json(cls, content: str) -> "JwkSet": ...
-    """
-    Create a JWK Set from a JSON string.
-
-    Args:  
-        content (str): A JSON string representing a JWK Set.  
-
-    Returns:  
-        JwkSet: A JwkSet object.  
-
-    Raises:  
-        ValueError: If the input string is not a valid JSON or does not represent a valid JWK Set.  
-
-    Example:  
-        >>> jwk_set_json = '{"keys":[{"kty":"RSA","n":"0vx7...","e":"AQAB"}]}'  
-        >>> jwk_set = JwkSet.from_json(jwk_set_json)  
-    """
 
     def __str__(self) -> str: ...
 
 class KeyRing:
     @classmethod
     def from_jwkset(cls, jwk_set: JwkSet) -> "KeyRing": ...
-    """
-    Create a KeyRing from a JWK Set.
-
-    Args:
-        jwk_set (JwkSet): An JwkSet object.
-
-    Returns: 
-        KeyRing: A KeyRing object.
-
-    Example:
-        >>> jwk_set_json = '{"keys":[{"kty":"RSA","n":"0vx7...","e":"AQAB"}]}'
-        >>> jwk_set = JwkSet.from_json(jwk_set_json)
-        >>> key_ring = KeyRing.from_jwkset(jwk_set)
-    """
 
     def decode(
         self, token: str, validation_options: ValidationOptions
     ) -> dict[str, JsonType]: ...
-    """
-    Decode a JWT using one of the provided keys. The keys used are found by looking for the kid in the jwt.
-
-    Args:
-        token (str): The JWT to decode.
-        validation_options (ValidationOptions): The options to use when validating the token.
-
-    Returns:
-        dict: The decoded claims.
-    """

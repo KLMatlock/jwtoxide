@@ -21,3 +21,4 @@ strip = true
 test = ["pytest", "pyjwt>=2.0.0"]
 docs = ["sphinx", "autodoc", "sphinx-rtd-theme"]
 lint = ["ruff"]
+version = ["bump-my-version"]

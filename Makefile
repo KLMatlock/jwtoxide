@@ -12,7 +12,7 @@ format:
 
 lint:
 	cargo clippy
-	ruff lint .
+	ruff check .
 
 build:
 	maturin build --release
