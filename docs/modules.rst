@@ -13,11 +13,20 @@ API Documentation
    .. autoclass:: DecodingKey
       :members:
 
+JSON Web Keys (JWKs)
+====================
+
+   .. autoclass:: Jwk
+      :members:
+   
+   .. autoclass:: JwkSet
+      :members:
+
+   .. autoclass:: KeyRing
+      :members:
+
 Exceptions
 ==========
-
-.. automodule:: jwtoxide
-   :no-index:
 
    .. autoclass:: InvalidTokenError
    .. autoclass:: DecodeError

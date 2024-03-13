@@ -181,6 +181,8 @@ fn parse_decode_error(error: Error) -> PyErr {
 }
 
 /// Decode a JWT using the provided keys.
+/// 
+/// This is a lower level api. Most users should rely on :class:`KeyRing` to decode tokens from a SSO provider.
 ///
 /// :param token: The JWT to decode.
 /// :type token: str
@@ -191,6 +193,7 @@ fn parse_decode_error(error: Error) -> PyErr {
 /// :return: The decoded claims.
 /// :rtype: dict
 /// :raises: :class:`InvalidTokenError`: If the token fails validation.
+/// 
 #[pyfunction]
 #[pyo3(name = "decode")]
 fn py_decode(
