@@ -13,13 +13,13 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  build-linux:
     # The type of runner that the job will run on
     strategy:
       matrix:
-        os: [ubuntu-latest]
         python-minor-version: ["9", "10", "11", "12"]
-    runs-on: ${{ matrix.os }}
+      fail-fast: true
+    runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -28,16 +28,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.${{ matrix.python-minor-version }}
-      - name: Build and test
-        run: |
-          python3 -m venv .venv 
-          source .venv/bin/activate
-          pip install maturin
-          make install-dev
-          make test
-        
       - name: Set up QEMU
-        if: runner.os == 'Linux'
         uses: docker/setup-qemu-action@v3
         with:
           platforms: all
@@ -59,19 +50,43 @@ jobs:
             rustup show
         #   CIBW_TEST_SKIP: '*-macosx_arm64 *-macosx_universal2:arm64'
         #   CIBW_BUILD_VERBOSITY: 1
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v3
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-      # - name: Build Docker image
-      #   run: |
-      #     docker run --platform=linux/arm64 \
-      #       -v .:/io \
-      #       ghcr.io/pyo3/maturin \
-      #         build --release --interpreter python${{ matrix.python-version }}
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.os }}-${{ matrix.python-minor-version }}
+          name: wheels-linux-3.${{ matrix.python-minor-version }}
+          compression-level: 0
+          path: wheelhouse/*.whl
+  build-mac:
+    # The type of runner that the job will run on
+    strategy:
+      matrix:
+        python-minor-version: ["9", "10", "11", "12"]
+      fail-fast: true
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.${{ matrix.python-minor-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.${{ matrix.python-minor-version }}
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.16.5
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_BUILD: 'cp3${{ matrix.python-minor-version }}-*'
+          CIBW_ARCHS: 'x86_64'
+          CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
+          CIBW_BEFORE_BUILD_LINUX: >
+            curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y &&
+            rustup show
+        #   CIBW_TEST_SKIP: '*-macosx_arm64 *-macosx_universal2:arm64'
+        #   CIBW_BUILD_VERBOSITY: 1
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-mac-3.${{ matrix.python-minor-version }}
           compression-level: 0
           path: wheelhouse/*.whl
