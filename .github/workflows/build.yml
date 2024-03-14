@@ -74,7 +74,7 @@ jobs:
           # rust doesn't seem to be available for musl linux on i686
           CIBW_SKIP: '*-musllinux_i686 *_ppc64le *_s390x'
         #   # we build for "alt_arch_name" if it exists, else 'auto'
-          CIBW_ARCHS: 'auto'
+          CIBW_ARCHS: 'aarch64'
           CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
         #   CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
         #   CIBW_BEFORE_BUILD: rustup show
