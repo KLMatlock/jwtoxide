@@ -27,7 +27,7 @@ jobs:
       - name: Test with Python 3.12
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y
-          python3 -m pip install maturin && maturin build --sdit
+          python3 -m pip install maturin && maturin build --sdist
           python3 -m pip install target/wheels/*.tar.gz[test]
           python3 -m pytest .
       - name: Archive production artifacts
