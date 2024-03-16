@@ -130,6 +130,10 @@ jobs:
     steps:
       # retrieve your distributions here
       - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: "jwtoxide-*"
+          merge-multiple: true
       - name: Display structure of downloaded files
         run: ls -R
       - name: Publish package distributions to PyPI
