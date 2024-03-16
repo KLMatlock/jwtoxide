@@ -32,7 +32,7 @@ jobs:
           python3 -m pip install ${EGG}[test]
           make test
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: sdist
           compression-level: 0
