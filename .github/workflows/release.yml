@@ -35,6 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: sdist
+          compression-level: 0
           path: target/wheels/*.tar.gz
   build-qemu:
     strategy:
@@ -135,5 +136,5 @@ jobs:
           merge-multiple: true
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      # - name: Publish package distributions to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
