@@ -1,0 +1,41 @@
+name: Bump the version on merge
+on:
+  workflow_dispatch:
+    inputs:
+      release-kind:
+        type: choice
+        description: What type of release
+        options: 
+        - major
+        - minor
+        - patch
+
+jobs:
+  version:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python and Git
+        uses: ./.github/actions/setup-python-and-git
+        with:
+          python-version: '3.11'
+      - name: Install requirements
+        run: python -m pip install bump-my-version
+      - name: Bump version
+        shell: bash
+        run: |
+          case "${{ github.event.inputs.release-kind }}" in
+            major|minor|patch)
+              bump-my-version bump --allow-dirty --verbose "$RELEASE_KIND"
+              echo "TAG_NAME=$(bump-my-version show current_version)" >> $GITHUB_ENV
+              git push
+              git push --tags
+              echo "PACKAGE=true" >> $GITHUB_ENV
+              ;;
+            dev)
+              echo "Intentionally not bumping version for dev release"
+              ;;
+          esac
