@@ -1,6 +1,8 @@
 jwtoxide
 ========
 
+`Read the Docs`_
+
 PyO3 bindings to the `jsonwebtoken` library in Rust.
 
 This library provides Python bindings to the jsonwebtoken_ Rust library. The JSON Web Token (JWT)
@@ -23,3 +25,4 @@ Development
 Building for development requires `maturin`. Once installed run `make install-dev`.
 
 .. _jsonwebtoken: https://docs.rs/jsonwebtoken/latest/jsonwebtoken/
+.. _`Read the Docs`: https://jwtoxide.readthedocs.io/en/latest/
