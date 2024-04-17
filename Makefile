@@ -1,7 +1,7 @@
 PYTHON := python3
 
 install-dev:
-	maturin develop --extras test,docs,lint
+	maturin develop --extras test,docs,lint,changelog
 
 test:
 	$(PYTHON) -m pytest
