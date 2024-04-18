@@ -15,14 +15,14 @@ struct DecodedClaims {
     extra_fields: HashMap<String, claims::Claim>,
 }
 
-/// A set of JWKs that have been mapped to their key id. 
-/// 
+/// A set of JWKs that have been mapped to their key id.
+///
 /// This is primary API for validating JWTs from an oAuth2/OIDC provider.
-/// 
+///
 /// :example:
-/// 
+///
 /// .. code-block:: python  
-/// 
+///
 ///   from base64 import urlsafe_b64encode
 ///   import time
 ///
@@ -56,7 +56,7 @@ struct DecodedClaims {
 ///   )
 ///   jwk_set = JwkSet.from_json(jwk_set_json)
 ///   key_ring = KeyRing.from_jwkset(jwk_set)
-/// 
+///
 ///   validation_options = ValidationOptions(
 ///       aud={"test"}, iss={"test-issuer"}, algorithms=["HS256"]
 ///   )
@@ -71,12 +71,12 @@ pub struct KeyRing {
 #[pymethods]
 impl KeyRing {
     /// Create a KeyRing from a JwkSet.
-    /// 
+    ///
     /// :param jwkset: The JwkSet.
     /// :type jwkset: JwkSet
     /// :return: The KeyRing.
     /// :rtype: KeyRing
-    /// 
+    ///
     #[classmethod]
     pub fn from_jwkset(_cls: &PyType, jwkset: &JwkSet) -> PyResult<Self> {
         let mut keys = HashMap::new();
@@ -96,7 +96,7 @@ impl KeyRing {
     }
 
     /// Decode a JWT token.
-    /// 
+    ///
     /// :param token: The JWT to decode.
     /// :type token: str
     /// :param validation_options: The options for token validation.
@@ -104,7 +104,7 @@ impl KeyRing {
     /// :return: The decoded claims.
     /// :rtype: dict
     /// :raises: :class:`InvalidTokenError`: If the token fails validation.
-    /// 
+    ///
     pub fn decode(
         &self,
         token: &str,
