@@ -1,5 +1,6 @@
 use jsonwebtoken::Algorithm;
 use pyo3::prelude::*;
+use pyo3::pybacked::PyBackedStr;
 use std::collections::HashSet;
 use std::str::FromStr;
 
@@ -82,7 +83,7 @@ impl ValidationOptions {
         validate_exp: bool,
         validate_nbf: bool,
         validate_aud: bool,
-        algorithms: Option<Vec<&str>>,
+        algorithms: Option<Vec<PyBackedStr>>,
         verify_signature: bool,
     ) -> Self {
         let mut validation = jsonwebtoken::Validation::new(Algorithm::EdDSA);

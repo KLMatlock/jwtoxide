@@ -84,7 +84,7 @@ pub enum JsonValue {
 }
 
 fn encode_claims(
-    claim_value: &HashMap<&str, claims::Claim>,
+    claim_value: &HashMap<String, claims::Claim>,
     key: jsonwebtoken::EncodingKey,
     algorithm: &str,
 ) -> Result<String, Error> {
@@ -135,7 +135,7 @@ fn get_decoding_key(key: &PyAny) -> Result<DecodingKey, PyErr> {
 #[pyfunction]
 #[pyo3(signature = (payload, key, algorithm="HS256", header=None))]
 fn encode(
-    payload: HashMap<&str, claims::Claim>,
+    payload: HashMap<String, claims::Claim>,
     key: &PyAny,
     algorithm: &str,
     header: Option<&PyAny>,

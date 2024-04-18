@@ -2,6 +2,7 @@ use std::str::FromStr;
 
 use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
+use pyo3::pybacked::PyBackedStr;
 
 struct PublicKeyUse(jsonwebtoken::jwk::PublicKeyUse);
 
@@ -48,7 +49,7 @@ pub struct CommonParameters {
 }
 
 fn map_key_operations(
-    key_operations: Vec<&str>,
+    key_operations: Vec<PyBackedStr>,
 ) -> Result<Vec<jsonwebtoken::jwk::KeyOperations>, PyErr> {
     key_operations
         .iter()
@@ -63,7 +64,7 @@ impl CommonParameters {
     #[allow(clippy::too_many_arguments)]
     fn new(
         public_key_use: Option<&str>,
-        key_operations: Option<Vec<&str>>,
+        key_operations: Option<Vec<PyBackedStr>>,
         key_algorithm: Option<&str>,
         key_id: Option<String>,
         x509_url: Option<String>,
