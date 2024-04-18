@@ -65,7 +65,7 @@ impl ToPyObject for Claim {
             }
             serde_json::Value::String(s) => PyString::new_bound(py, s).to_object(py),
             serde_json::Value::Array(arr) => {
-                let pylist = PyList::empty(py);
+                let pylist = PyList::empty_bound(py);
                 for item in arr {
                     pylist.append(Claim(item.clone()).to_object(py)).unwrap();
                 }
@@ -98,7 +98,7 @@ impl IntoPy<PyObject> for Claim {
             }
             serde_json::Value::String(s) => PyString::new_bound(py, s).to_object(py),
             serde_json::Value::Array(arr) => {
-                let pylist = PyList::empty(py);
+                let pylist = PyList::empty_bound(py);
                 for item in arr {
                     pylist.append(Claim(item.clone()).to_object(py)).unwrap();
                 }

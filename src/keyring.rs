@@ -78,7 +78,7 @@ impl KeyRing {
     /// :rtype: KeyRing
     ///
     #[classmethod]
-    pub fn from_jwkset(_cls: &PyType, jwkset: &JwkSet) -> PyResult<Self> {
+    pub fn from_jwkset(_cls: &Bound<'_, PyType>, jwkset: &JwkSet) -> PyResult<Self> {
         let mut keys = HashMap::new();
 
         for k in &jwkset.jwkset.keys {
