@@ -19,4 +19,4 @@ jobs:
       - name: Check Towncrier
         shell: bash
         run: |
-          towncrier check --compare-with origin/dev
+          towncrier check
