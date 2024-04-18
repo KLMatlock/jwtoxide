@@ -43,3 +43,6 @@ commit_args = ""
 
 [[tool.bumpversion.files]]
 filename = "Cargo.toml"
+
+[tool.towncrier]
+directory = "changes"
