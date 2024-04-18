@@ -75,12 +75,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a EC PEM file.
-    /// 
+    ///
     /// :param content: The contents of a PEM file.
     /// :type content: str
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     pub fn from_ec_pem(_cls: &PyType, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::DecodingKey::from_ec_pem(content.as_bytes()) {
@@ -97,12 +97,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a Ed PEM file.
-    /// 
+    ///
     /// :param content: The contents of a PEM file.
     /// :type content: str
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     fn from_ed_pem(_cls: &PyType, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::DecodingKey::from_ed_pem(content.as_bytes()) {
@@ -119,12 +119,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a RSA DER file.
-    /// 
+    ///
     /// :param content: The contents of a DER file.
     /// :type content: bytes
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     fn from_rsa_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
         let instance = DecodingKey {
@@ -134,12 +134,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a EC DER file.
-    /// 
+    ///
     /// :param content: The contents of a DER file.
     /// :type content: bytes
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     fn from_ec_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
         let instance = DecodingKey {
@@ -149,12 +149,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a Ed DER file.
-    /// 
+    ///
     /// :param content: The contents of a DER file.
     /// :type content: bytes
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     fn from_ed_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
         let instance = DecodingKey {
@@ -164,12 +164,12 @@ impl DecodingKey {
     }
 
     /// Create a key from a JSON Web Key (JWK).
-    /// 
+    ///
     /// :param jwk: The JWK.
     /// :type jwk: Jwk
     /// :return: The key.
     /// :rtype: DecodingKey
-    /// 
+    ///
     #[classmethod]
     pub fn from_jwk(_cls: &PyType, jwk: &Jwk) -> PyResult<Self> {
         let key = match jsonwebtoken::DecodingKey::from_jwk(&jwk.jwk) {

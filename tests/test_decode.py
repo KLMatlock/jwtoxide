@@ -120,6 +120,28 @@ def test_expired_signature():
         decode(encoded_jwt, "secret", validation_options=validation_options)
 
 
+def test_early_expired_signature():
+    """Test that error raised when the token has expired."""
+    data = {
+        "sub": "1234567890",
+        "exp": int(time.time()) + 2,
+        "iat": int(time.time()) - 5000,
+        "nbf": int(time.time()) - 5000,
+        "name": "John Doe",
+    }
+    encoded_jwt = jwt.encode(data, "secret", algorithm="HS256")
+    validation_options = ValidationOptions(
+        early_expiration_seconds=3,
+        leeway_seconds=0,
+        aud=None,
+        iss=None,
+        algorithms=["HS256"],
+    )
+
+    with pytest.raises(ExpiredSignatureError):
+        decode(encoded_jwt, "secret", validation_options=validation_options)
+
+
 def test_invalid_exp():
     """Test that error raised when the exp claim is an invalid type."""
     data = {
@@ -146,7 +168,9 @@ def test_expired_leeway():
         "name": "John Doe",
     }
     encoded_jwt = jwt.encode(data, "secret", algorithm="HS256")
-    validation_options = ValidationOptions(aud=None, iss=None, leeway_seconds = 60, algorithms=["HS256"])
+    validation_options = ValidationOptions(
+        aud=None, iss=None, leeway_seconds=60, algorithms=["HS256"]
+    )
 
     decode(encoded_jwt, "secret", validation_options=validation_options)
 
