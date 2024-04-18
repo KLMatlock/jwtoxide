@@ -30,6 +30,11 @@ const DEFAULT_ALGORITHMS: [Algorithm; 9] = [
 ///     Note only checks for presences of the claim, does not validate the value.
 ///     Defaults to {"exp", "iat", "nbf"}.
 /// :type required_spec_claims: set[str], optional
+/// :param early_expiration_seconds: Reject a token some time (in seconds)
+///     before the exp to prevent expiration in transit over the network.
+///     The value is the inverse of leeway, subtracting from the validation time.
+///     Defaults to 0
+/// :type early_expiration_seconds: int, optional
 /// :param leeway_seconds: The leeway for validating time based claims in second.
 ///     Defaults to 5 seconds.
 /// :type leeway_seconds: int, optional
@@ -58,6 +63,7 @@ impl ValidationOptions {
         iss,
         sub = None,
         required_spec_claims = None,
+        early_expiration_seconds = 0,
         leeway_seconds = 5,
         validate_exp = true,
         validate_nbf = true,
@@ -71,6 +77,7 @@ impl ValidationOptions {
         iss: Option<HashSet<String>>,
         sub: Option<String>,
         required_spec_claims: Option<HashSet<String>>,
+        early_expiration_seconds: u64,
         leeway_seconds: u64,
         validate_exp: bool,
         validate_nbf: bool,
@@ -98,6 +105,7 @@ impl ValidationOptions {
             }
         };
         validation.required_spec_claims = req_spec_claims;
+        validation.reject_tokens_expiring_in_less_than = early_expiration_seconds;
         validation.leeway = leeway_seconds;
         validation.validate_exp = validate_exp;
         validation.validate_nbf = validate_nbf;
