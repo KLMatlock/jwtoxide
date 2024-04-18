@@ -19,6 +19,7 @@ strip = true
 
 [project.optional-dependencies]
 test = ["pytest", "pyjwt>=2.0.0"]
+changelog = ["towncrier"]
 docs = ["sphinx", "autodoc", "sphinx-rtd-theme"]
 lint = ["ruff"]
 version = ["bump-my-version"]
@@ -42,3 +43,6 @@ commit_args = ""
 
 [[tool.bumpversion.files]]
 filename = "Cargo.toml"
+
+[tool.towncrier]
+directory = "changes"

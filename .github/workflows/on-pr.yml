@@ -1,0 +1,22 @@
+name: Checks when a PR is made to dev.
+on:
+  pull_request:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - dev
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+      - name: Install requirements
+        run: python -m pip install towncrier
+      - name: Check Towncrier
+        shell: bash
+        run: |
+          towncrier check --compare-with origin/dev
