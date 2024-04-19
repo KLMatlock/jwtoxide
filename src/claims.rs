@@ -12,7 +12,6 @@ impl FromPyObject<'_> for Claim {
     }
 }
 
-
 /// Converts a Python object to a serde_json::Value.
 fn extract_value_bound(value: &Bound<'_, PyAny>) -> PyResult<serde_json::Value> {
     if let Ok(dict) = value.downcast::<PyDict>() {
@@ -22,32 +21,31 @@ fn extract_value_bound(value: &Bound<'_, PyAny>) -> PyResult<serde_json::Value> 
             let value = extract_value_bound(&value)?;
             map.insert(key, value);
         }
-        return Ok(serde_json::Value::Object(map))
+        return Ok(serde_json::Value::Object(map));
     } else if let Ok(val) = value.downcast::<PyBool>() {
         let rval = val.extract::<bool>()?;
-        return Ok(serde_json::Value::Bool(rval))
+        return Ok(serde_json::Value::Bool(rval));
     } else if let Ok(val) = value.downcast::<PyString>() {
-        return Ok(serde_json::Value::String(val.to_string()))
+        return Ok(serde_json::Value::String(val.to_string()));
     } else if let Ok(val) = value.downcast::<PyLong>() {
         let rval = val.extract::<i64>()?;
-        return Ok(serde_json::Value::Number(serde_json::Number::from(rval)))
+        return Ok(serde_json::Value::Number(serde_json::Number::from(rval)));
     } else if let Ok(val) = value.downcast::<PyFloat>() {
         let rval = val.extract::<f64>()?;
         return Ok(serde_json::Value::Number(
             serde_json::Number::from_f64(rval).unwrap(),
-        ))
+        ));
     } else if let Ok(val) = value.downcast::<PyList>() {
         let list_iter = |val| extract_value_bound(&val);
         let vec: Result<Vec<serde_json::Value>, _> = val.into_iter().map(list_iter).collect();
-        return Ok(serde_json::Value::Array(vec?))
+        return Ok(serde_json::Value::Array(vec?));
     } else if value.is_none() {
-        return Ok(serde_json::Value::Null)
+        return Ok(serde_json::Value::Null);
     }
     Err(PyErr::new::<pyo3::exceptions::PyTypeError, _>(
         "Invalid value type",
     ))
 }
-
 
 impl ToPyObject for Claim {
     fn to_object(&self, py: Python) -> PyObject {

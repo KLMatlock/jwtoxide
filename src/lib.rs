@@ -214,7 +214,10 @@ fn py_decode(
 #[pymodule]
 fn jwtoxide(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
-    m.add("InvalidTokenError", _py.get_type_bound::<InvalidTokenError>())?;
+    m.add(
+        "InvalidTokenError",
+        _py.get_type_bound::<InvalidTokenError>(),
+    )?;
     m.add("DecodeError", _py.get_type_bound::<DecodeError>())?;
     m.add(
         "InvalidSignatureError",
@@ -228,12 +231,18 @@ fn jwtoxide(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
         "ExpiredSignatureError",
         _py.get_type_bound::<ExpiredSignatureError>(),
     )?;
-    m.add("InvalidIssuerError", _py.get_type_bound::<InvalidIssuerError>())?;
+    m.add(
+        "InvalidIssuerError",
+        _py.get_type_bound::<InvalidIssuerError>(),
+    )?;
     m.add(
         "InvalidAudienceError",
         _py.get_type_bound::<InvalidAudienceError>(),
     )?;
-    m.add("InvalidSubjectError", _py.get_type_bound::<InvalidSubjectError>())?;
+    m.add(
+        "InvalidSubjectError",
+        _py.get_type_bound::<InvalidSubjectError>(),
+    )?;
     m.add(
         "ImmatureSignatureError",
         _py.get_type_bound::<ImmatureSignatureError>(),
