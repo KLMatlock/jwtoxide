@@ -10,7 +10,7 @@ pub struct EncodingKey {
 #[pymethods]
 impl EncodingKey {
     #[classmethod]
-    pub fn from_secret(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
+    pub fn from_secret(_cls: &Bound<'_, PyType>, content: &[u8]) -> PyResult<Self> {
         let instance = EncodingKey {
             key: jsonwebtoken::EncodingKey::from_secret(content),
         };
@@ -18,7 +18,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    pub fn from_base64_secret(_cls: &PyType, content: &str) -> PyResult<Self> {
+    pub fn from_base64_secret(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::EncodingKey::from_base64_secret(content) {
             Ok(key) => key,
             Err(e) => {
@@ -33,7 +33,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    pub fn from_rsa_pem(_cls: &PyType, content: &str) -> PyResult<Self> {
+    pub fn from_rsa_pem(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::EncodingKey::from_rsa_pem(content.as_bytes()) {
             Ok(key) => key,
             Err(e) => {
@@ -48,7 +48,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    pub fn from_ec_pem(_cls: &PyType, content: &str) -> PyResult<Self> {
+    pub fn from_ec_pem(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::EncodingKey::from_ec_pem(content.as_bytes()) {
             Ok(key) => key,
             Err(e) => {
@@ -63,7 +63,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    fn from_ed_pem(_cls: &PyType, content: &str) -> PyResult<Self> {
+    fn from_ed_pem(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let key = match jsonwebtoken::EncodingKey::from_ed_pem(content.as_bytes()) {
             Ok(key) => key,
             Err(e) => {
@@ -78,7 +78,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    fn from_rsa_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
+    fn from_rsa_der(_cls: &Bound<'_, PyType>, content: &[u8]) -> PyResult<Self> {
         let instance = EncodingKey {
             key: jsonwebtoken::EncodingKey::from_rsa_der(content),
         };
@@ -86,7 +86,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    fn from_ec_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
+    fn from_ec_der(_cls: &Bound<'_, PyType>, content: &[u8]) -> PyResult<Self> {
         let instance = EncodingKey {
             key: jsonwebtoken::EncodingKey::from_ec_der(content),
         };
@@ -94,7 +94,7 @@ impl EncodingKey {
     }
 
     #[classmethod]
-    fn from_ed_der(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
+    fn from_ed_der(_cls: &Bound<'_, PyType>, content: &[u8]) -> PyResult<Self> {
         let instance = EncodingKey {
             key: jsonwebtoken::EncodingKey::from_ed_der(content),
         };

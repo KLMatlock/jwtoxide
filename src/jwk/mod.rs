@@ -21,7 +21,7 @@ impl Jwk {
     /// :raises: ValueError: If the JSON is invalid.
     ///
     #[classmethod]
-    pub fn from_json(_cls: &PyType, content: &str) -> PyResult<Self> {
+    pub fn from_json(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let deserialized: jsonwebtoken::jwk::Jwk = match serde_json::from_str(content) {
             Ok(jwk) => jwk,
             Err(e) => {
@@ -57,7 +57,7 @@ impl JwkSet {
     /// :raises: ValueError: If the JSON is invalid.
     ///
     #[classmethod]
-    pub fn from_json(_cls: &PyType, content: &str) -> PyResult<Self> {
+    pub fn from_json(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let deserialized: jsonwebtoken::jwk::JwkSet = match serde_json::from_str(content) {
             Ok(jwk) => jwk,
             Err(e) => {

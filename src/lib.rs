@@ -84,7 +84,7 @@ pub enum JsonValue {
 }
 
 fn encode_claims(
-    claim_value: &HashMap<&str, claims::Claim>,
+    claim_value: &HashMap<String, claims::Claim>,
     key: jsonwebtoken::EncodingKey,
     algorithm: &str,
 ) -> Result<String, Error> {
@@ -93,7 +93,7 @@ fn encode_claims(
     jsonwebtoken::encode(&header, &claim_value, &key)
 }
 
-fn get_encoding_key(key: &PyAny) -> Result<EncodingKey, PyErr> {
+fn get_encoding_key(key: &Bound<'_, PyAny>) -> Result<EncodingKey, PyErr> {
     if let Ok(py_key) = key.downcast::<pyo3::types::PyString>() {
         let key_string = py_key.to_string();
         let secret_bytes = key_string.as_bytes();
@@ -107,7 +107,7 @@ fn get_encoding_key(key: &PyAny) -> Result<EncodingKey, PyErr> {
     }
 }
 
-fn get_decoding_key(key: &PyAny) -> Result<DecodingKey, PyErr> {
+fn get_decoding_key(key: &Bound<'_, PyAny>) -> Result<DecodingKey, PyErr> {
     if let Ok(py_key) = key.downcast::<pyo3::types::PyString>() {
         let key_string = py_key.to_string();
         let secret_bytes = key_string.as_bytes();
@@ -135,10 +135,10 @@ fn get_decoding_key(key: &PyAny) -> Result<DecodingKey, PyErr> {
 #[pyfunction]
 #[pyo3(signature = (payload, key, algorithm="HS256", header=None))]
 fn encode(
-    payload: HashMap<&str, claims::Claim>,
-    key: &PyAny,
+    payload: HashMap<String, claims::Claim>,
+    key: &Bound<'_, PyAny>,
     algorithm: &str,
-    header: Option<&PyAny>,
+    header: Option<&Bound<'_, PyAny>>,
 ) -> PyResult<String> {
     if header.is_some() {
         //let header_value = header.unwrap();
@@ -198,7 +198,7 @@ fn parse_decode_error(error: Error) -> PyErr {
 #[pyo3(name = "decode")]
 fn py_decode(
     token: &str,
-    key: &PyAny,
+    key: &Bound<'_, PyAny>,
     validation_options: &validation::ValidationOptions,
 ) -> PyResult<HashMap<String, claims::Claim>> {
     let decoding_key = get_decoding_key(key)?;
@@ -212,35 +212,44 @@ fn py_decode(
 
 /// PyO3 Bindings to the jsonwebtoken library.
 #[pymodule]
-fn jwtoxide(_py: Python, m: &PyModule) -> PyResult<()> {
+fn jwtoxide(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
-    m.add("InvalidTokenError", _py.get_type::<InvalidTokenError>())?;
-    m.add("DecodeError", _py.get_type::<DecodeError>())?;
+    m.add(
+        "InvalidTokenError",
+        _py.get_type_bound::<InvalidTokenError>(),
+    )?;
+    m.add("DecodeError", _py.get_type_bound::<DecodeError>())?;
     m.add(
         "InvalidSignatureError",
-        _py.get_type::<InvalidSignatureError>(),
+        _py.get_type_bound::<InvalidSignatureError>(),
     )?;
     m.add(
         "MissingRequiredClaimError",
-        _py.get_type::<MissingRequiredClaimError>(),
+        _py.get_type_bound::<MissingRequiredClaimError>(),
     )?;
     m.add(
         "ExpiredSignatureError",
-        _py.get_type::<ExpiredSignatureError>(),
+        _py.get_type_bound::<ExpiredSignatureError>(),
     )?;
-    m.add("InvalidIssuerError", _py.get_type::<InvalidIssuerError>())?;
+    m.add(
+        "InvalidIssuerError",
+        _py.get_type_bound::<InvalidIssuerError>(),
+    )?;
     m.add(
         "InvalidAudienceError",
-        _py.get_type::<InvalidAudienceError>(),
+        _py.get_type_bound::<InvalidAudienceError>(),
     )?;
-    m.add("InvalidSubjectError", _py.get_type::<InvalidSubjectError>())?;
+    m.add(
+        "InvalidSubjectError",
+        _py.get_type_bound::<InvalidSubjectError>(),
+    )?;
     m.add(
         "ImmatureSignatureError",
-        _py.get_type::<ImmatureSignatureError>(),
+        _py.get_type_bound::<ImmatureSignatureError>(),
     )?;
     m.add(
         "InvalidAlgorithmError",
-        _py.get_type::<InvalidAlgorithmError>(),
+        _py.get_type_bound::<InvalidAlgorithmError>(),
     )?;
     m.add_function(wrap_pyfunction!(encode, m)?)?;
     m.add_function(wrap_pyfunction!(py_decode, m)?)?;
