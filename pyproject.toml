@@ -44,5 +44,9 @@ commit_args = ""
 [[tool.bumpversion.files]]
 filename = "Cargo.toml"
 
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+
 [tool.towncrier]
 directory = "changes"
+version = "0.1.0"
