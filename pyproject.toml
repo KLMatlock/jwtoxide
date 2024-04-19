@@ -44,6 +44,11 @@ commit_args = ""
 [[tool.bumpversion.files]]
 filename = "Cargo.toml"
 
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = '\ncurrent_version = "{current_version}"'
+replace = '\ncurrent_version = "{new_version}"'
+
 [tool.towncrier]
 package = "jwtoxide"
 directory = "changes"
