@@ -16,3 +16,6 @@ lint:
 
 build:
 	maturin build --release
+
+get-release:
+	grep NEWS.rst -P "^Pyauditlogger\s+\d+\.\d+\.\d+\s+\(\d{4}-\d{2}-\d{2}\)\n=+" | tail -n +2
