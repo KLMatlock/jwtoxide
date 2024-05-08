@@ -83,16 +83,6 @@ pub enum JsonValue {
     String(String),
 }
 
-fn encode_claims(
-    claim_value: &HashMap<String, claims::Claim>,
-    key: jsonwebtoken::EncodingKey,
-    algorithm: &str,
-) -> Result<String, Error> {
-    let algorithm = jsonwebtoken::Algorithm::from_str(algorithm)?;
-    let header = jsonwebtoken::Header::new(algorithm);
-    jsonwebtoken::encode(&header, &claim_value, &key)
-}
-
 fn get_encoding_key(key: &Bound<'_, PyAny>) -> Result<EncodingKey, PyErr> {
     if let Ok(py_key) = key.downcast::<pyo3::types::PyString>() {
         let key_string = py_key.to_string();
@@ -121,6 +111,21 @@ fn get_decoding_key(key: &Bound<'_, PyAny>) -> Result<DecodingKey, PyErr> {
     }
 }
 
+fn header_from_algorithm(algorithm: Option<&str>) -> PyResult<jsonwebtoken::Header> {
+    let algorithm_value = algorithm
+        .ok_or_else(|| PyErr::new::<exceptions::PyException, _>("Missing algorithm value"))?;
+    let algorithm = match jsonwebtoken::Algorithm::from_str(algorithm_value) {
+        Ok(alg) => alg,
+        Err(e) => {
+            return Err(PyErr::new::<exceptions::PyException, _>(format!(
+                "Invalid algorithm: {}",
+                e
+            )))
+        }
+    };
+    Ok(jsonwebtoken::Header::new(algorithm))
+}
+
 /// Encode a set of claims into a Json Web Token (JWT).
 ///
 /// :param payload: The claims to encode, must be json serializable.
@@ -137,18 +142,27 @@ fn get_decoding_key(key: &Bound<'_, PyAny>) -> Result<DecodingKey, PyErr> {
 fn encode(
     payload: HashMap<String, claims::Claim>,
     key: &Bound<'_, PyAny>,
-    algorithm: &str,
-    header: Option<&Bound<'_, PyAny>>,
+    algorithm: Option<&str>,
+    header: Option<&header::Header>,
 ) -> PyResult<String> {
-    if header.is_some() {
-        //let header_value = header.unwrap();
-        //let header_dict = header_value.extract::<Header>()?;
+    let encoding_key = get_encoding_key(key)?;
+
+    if header.is_none() && algorithm.is_none() {
         return Err(PyErr::new::<exceptions::PyException, _>(
-            "Header is not supported yet",
+            "Required to pass either algorithm or header values.",
         ));
     }
-    let encoding_key = get_encoding_key(key)?;
-    match encode_claims(&payload, encoding_key, algorithm) {
+
+    let res: Result<String, Error>;
+    if header.is_some() {
+        let encode_header = header.unwrap();
+        res = jsonwebtoken::encode(&encode_header.rs_header, &payload, &encoding_key);
+    } else {
+        let encode_header = header_from_algorithm(algorithm)?;
+        res = jsonwebtoken::encode(&encode_header, &payload, &encoding_key);
+    }
+
+    match res {
         Ok(t) => Ok(t),
         Err(e) => Err(PyErr::new::<exceptions::PyException, _>(format!(
             "Failed to encode token: {}",
@@ -261,5 +275,6 @@ fn jwtoxide(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<jwk::Jwk>()?;
     m.add_class::<jwk::JwkSet>()?;
     m.add_class::<keyring::KeyRing>()?;
+    m.add_class::<header::Header>()?;
     Ok(())
 }

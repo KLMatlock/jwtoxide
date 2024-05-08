@@ -13,6 +13,9 @@ API Documentation
    .. autoclass:: DecodingKey
       :members:
 
+   .. autoclass:: Header
+      :members:
+
 JSON Web Keys (JWKs)
 ====================
 

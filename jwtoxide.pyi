@@ -5,7 +5,8 @@ JsonType = Union[None, int, str, bool, list[JsonType], dict[str, JsonType]]
 def encode(
     payload: dict[str, JsonType],
     key: EncodingKey | str,
-    algorithm: str = "HS256",
+    algorithm: Optional[str] = None,
+    header: Optional[Header] = None,
 ) -> str: ...
 def decode(
     token: str,
@@ -117,3 +118,19 @@ class KeyRing:
     def decode(
         self, token: str, validation_options: ValidationOptions
     ) -> dict[str, JsonType]: ...
+
+class Header:
+    def __init__(
+        self,
+        alg: Optional[str] = None,
+        kid: Optional[str] = None,
+        typ: Optional[str] = None,
+        cty: Optional[str] = None,
+        jku: Optional[str] = None,
+        jwk: Optional[Jwk] = None,
+        x5u: Optional[str] = None,
+        x5c: Optional[list[str]] = None,
+        x5t: Optional[str] = None,
+        x5t_s256: Optional[str] = None,
+    ) -> None: ...
+    def __str__(self) -> str: ...

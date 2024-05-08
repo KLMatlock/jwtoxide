@@ -1,6 +1,6 @@
 import jwt
 
-from jwtoxide import encode, EncodingKey
+from jwtoxide import encode, EncodingKey, Header, Jwk
 
 
 def test_create_encode_key_from_secret():
@@ -13,4 +13,13 @@ def test_encode_jwt():
     SECRET = "secret"
 
     encoded_jwt = encode(CLAIMS, SECRET)
+    jwt.decode(encoded_jwt, SECRET, algorithms=["HS256"])
+
+
+def test_encode_jwt_header():
+    header = Header(alg="HS256")
+    CLAIMS = {"foo": "bar"}
+    SECRET = "secret"
+
+    encoded_jwt = encode(CLAIMS, SECRET, header=header)
     jwt.decode(encoded_jwt, SECRET, algorithms=["HS256"])

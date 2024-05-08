@@ -1,0 +1,1 @@
+Adds in a `Header` class that can be passed to JWT encoding function.
