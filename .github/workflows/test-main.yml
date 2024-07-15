@@ -135,7 +135,7 @@ jobs:
         with:
           rustflags: ""
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse bindings/python
+        run: python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_BUILD: 'cp3${{ matrix.python-minor-version }}-*'
           CIBW_ARCHS: 'auto'
