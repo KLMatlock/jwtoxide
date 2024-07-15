@@ -130,17 +130,17 @@ jobs:
         with:
           rustflags: ""
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse bindings/python
+        run: python -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_BUILD: 'cp3${{ matrix.python-minor-version }}-*'
           CIBW_ARCHS: 'auto'
           CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
         #   CIBW_BEFORE_BUILD: rustup show
           CIBW_TEST_EXTRAS: "test"
-          CIBW_TEST_COMMAND: "echo Wheel installed"
+          CIBW_TEST_COMMAND: "pytest {project}\\tests"
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.os }}-3.${{ matrix.python-minor-version }}
+          name: wheels-windows-3.${{ matrix.python-minor-version }}
           compression-level: 0
           path: wheelhouse/*.whl
