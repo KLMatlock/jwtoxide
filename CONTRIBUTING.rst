@@ -1,6 +1,11 @@
 Contributing
 ============
 
+Adding Changelog Entries
+------------------------
+
+Each new PR should have a change added through `towncrier`. Any PR must have an associated fragment using `towncrier create ...` before it can be merged.
+
 Building Documentation
 ----------------------
 
