@@ -7,6 +7,28 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    # The type of runner that the job will run on
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-minor-version: ["9", "10", "11", "12"]
+    runs-on: ${{ matrix.os }}
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.${{ matrix.python-minor-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.${{ matrix.python-minor-version }}
+      - name: Build and test
+        run: |
+          python3 -m venv .venv 
+          source .venv/bin/activate
+          pip install maturin
+          make install-dev
+          make test
   version:
     runs-on: ubuntu-latest
     steps:
