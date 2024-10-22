@@ -1,9 +1,10 @@
-name: Checks when a PR is made to dev.
+name: Checks when a PR is made to main.
 on:
   pull_request:
     # Sequence of patterns matched against refs/heads
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   version:
