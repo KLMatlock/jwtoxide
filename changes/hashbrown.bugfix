@@ -1,0 +1,1 @@
+Update hashbrown to 0.15.2 to resolve [CWE-502](https://cwe.mitre.org/data/definitions/502.html)
