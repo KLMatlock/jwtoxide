@@ -39,11 +39,13 @@ jobs:
           # Get the first line of the commit message from the PR's head commit
           commit_sha="${{ github.event.pull_request.head.sha }}"
           commit_message=$(git show -s --format=%B "$commit_sha" | head -1)
+          commit_message=$(git show -s --format=%B ${{ github.event.pull_request.head.sha }} | head -1)
 
           echo "Branch name: $branch_name"
           echo "Sanitized name: $sanitized_name"
           echo "Expected fragment path: $fragment_path"
           echo "Commit message: $commit_message"
+          echo "Head Sha: ${{ github.event.pull_request.head.sha }}"
 
           created_fragment="false"
           echo "Running towncrier check..."
