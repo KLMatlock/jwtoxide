@@ -31,7 +31,7 @@ jobs:
           FRAGMENT_DIR="changes"
 
           # Get branch name from the PR head ref and sanitize it
-          branch_name="${{ github.head_ref }}" # e.g., dependabot/pip/requests-2.28.1
+          branch_name="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" # e.g., dependabot/pip/requests-2.28.1
           sanitized_name=$(echo "$branch_name" | sed 's|/|_|g') # Replaces all '/' with '_'
           fragment_name="${sanitized_name}.misc" # Construct fragment name, using .misc type
           fragment_path="${FRAGMENT_DIR}/${fragment_name}"
@@ -54,7 +54,6 @@ jobs:
             # Check if the specific fragment file we would create *already exists*
             if [[ -f "$fragment_path" ]]; then
               echo "Fragment file '$fragment_path' already exists. Skipping creation."
-            fi
             else
               echo "Fragment file '$fragment_path' does not exist. Creating..."
               # Create the fragment since check failed AND file doesn't exist
