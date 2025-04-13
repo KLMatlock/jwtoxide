@@ -25,19 +25,69 @@ jobs:
           git config --local user.email "$(git log --pretty='%ae' -1)"
           git config --local user.name "Dependabot[bot]"
           git checkout ${{ github.event.pull_request.head.ref }}
-      - name: Do things
+      - name: Generate Fragment if Missing
+        id: generate_fragment # ID for referencing outputs
         run: |
-          # Parse the dependency
-          branch_name=$(git branch --show-current)
-          sanitized_name=${branch_name//\//_}
-          commit_message=$(git show -s --format=%B ${{ github.event.pull_request.head.sha }} | head -1)
-          dependency_name=$(sed -nE 's/Bump (.*) from.*/\1/p' <(echo $commit_message))
-          towncrier create ${sanitized_name}.misc -c "${commit_message}"
-      - name: Commit
+          FRAGMENT_DIR="changes"
+
+          # Get branch name from the PR head ref and sanitize it
+          branch_name="${{ github.head_ref }}" # e.g., dependabot/pip/requests-2.28.1
+          sanitized_name=$(echo "$branch_name" | sed 's|/|_|g') # Replaces all '/' with '_'
+          fragment_name="${sanitized_name}.misc" # Construct fragment name, using .misc type
+          fragment_path="${FRAGMENT_DIR}/${fragment_name}"
+
+          # Get the first line of the commit message from the PR's head commit
+          commit_sha="${{ github.event.pull_request.head.sha }}"
+          commit_message=$(git show -s --format=%B "$commit_sha" | head -1)
+
+          echo "Branch name: $branch_name"
+          echo "Sanitized name: $sanitized_name"
+          echo "Expected fragment path: $fragment_path"
+          echo "Commit message: $commit_message"
+
+          created_fragment="false"
+          echo "Running towncrier check..."
+          if towncrier check; then
+            echo "Towncrier check passed: News fragment found or not required."
+          else
+            echo "Towncrier check failed (exit code $?): News fragment potentially missing."
+            # Check if the specific fragment file we would create *already exists*
+            if [[ -f "$fragment_path" ]]; then
+              echo "Fragment file '$fragment_path' already exists. Skipping creation."
+            fi
+            else
+              echo "Fragment file '$fragment_path' does not exist. Creating..."
+              # Create the fragment since check failed AND file doesn't exist
+              towncrier create "$fragment_name" -c "$commit_message"
+              # Check if create command actually created the file (basic check)
+              if [[ -f "$fragment_path" ]]; then
+                 echo "News fragment successfully created at '$fragment_path'."
+                 created_fragment="true"
+              else
+                 echo "ERROR: towncrier create command ran but fragment '$fragment_path' was not found!"
+                 # Optionally fail the job here: exit 1
+              fi
+            fi
+          fi
+
+          # Set the output variable for the next step
+          echo "fragment_created=${created_fragment}" >> $GITHUB_OUTPUT
+      
+      - name: Commit and Push Fragment
+        if: steps.generate_fragment.outputs.fragment_created == 'true'
         run: |
-          git add .changelog/<PR-number>.internal.md
-          lockfile_changed=$(git status | grep 'Gemfile_next.lock\|vendor/licenses/bundler/')
-          git commit -m "[dependabot skip] Add fragment"
-      - name: Push changes back to branch
-        run: |
+          FRAGMENT_DIR="changes"
+          branch_name="${{ github.head_ref }}"
+          sanitized_name=$(echo "$branch_name" | sed 's|/|_|g')
+          fragment_name="${sanitized_name}.misc"
+          fragment_path="${FRAGMENT_DIR}/${fragment_name}"
+
+          echo "Adding fragment: ${fragment_path}"
+          git add "${fragment_path}"
+
+          echo "Committing fragment..."
+          git commit -m "chore: Add news fragment for Dependabot update" -m "[dependabot skip]" -m "[skip ci]"
+
+          echo "Pushing changes to ${{ github.event.pull_request.head.ref }}..."
+          # Push the commit back to the PR branch (origin is set by actions/checkout)
           git push origin ${{ github.event.pull_request.head.ref }}
