@@ -1,0 +1,43 @@
+name: Dependabot
+on:
+  push:
+    branches:
+      - "dependabot/**"
+
+jobs:
+  ci-image:
+    name: Change log fragment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install towncrier
+      - name: Configure git
+        run: |
+          git config --local user.email "$(git log --pretty='%ae' -1)"
+          git config --local user.name "Dependabot[bot]"
+          git checkout ${{ github.event.pull_request.head.ref }}
+      - name: Do things
+        run: |
+          # Parse the dependency
+          branch_name=$(git branch --show-current)
+          sanitized_name=${branch_name//\//_}
+          commit_message=$(git show -s --format=%B ${{ github.event.pull_request.head.sha }} | head -1)
+          dependency_name=$(sed -nE 's/Bump (.*) from.*/\1/p' <(echo $commit_message))
+          towncrier create ${sanitized_name}.misc -c "${commit_message}"
+      - name: Commit
+        run: |
+          git add .changelog/<PR-number>.internal.md
+          lockfile_changed=$(git status | grep 'Gemfile_next.lock\|vendor/licenses/bundler/')
+          git commit -m "[dependabot skip] Add fragment"
+      - name: Push changes back to branch
+        run: |
+          git push origin ${{ github.event.pull_request.head.ref }}
