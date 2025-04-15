@@ -55,9 +55,7 @@ jobs:
         with:
           python-version: 3.${{ matrix.python-minor-version }}
       - name: Install cibuildwheel
-        run: |
-          python -m pip install cibuildwheel==2.16.5
-          sudo apt-get install libatomic1
+        run: python -m pip install cibuildwheel==2.16.5
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
@@ -95,6 +93,9 @@ jobs:
           python-version: 3.${{ matrix.python-minor-version }}
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.5
+      - name: Install libatomic
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libatomic1
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
