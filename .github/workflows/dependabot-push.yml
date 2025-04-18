@@ -1,13 +1,11 @@
-name: Dependabot
+name: Dependabot Towncrier
 on:
-  pull_request:
+  push:
     branches:
       - "dependabot/**"
-    types:
-      - "opened"
 
 jobs:
-  ci-image:
+  dependabot-towncrier:
     name: Change log fragment
     runs-on: ubuntu-latest
     steps:
