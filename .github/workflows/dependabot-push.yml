@@ -13,6 +13,8 @@ jobs:
         with:
           fetch-depth: 1
           ref: ${{ github.event.pull_request.head.ref }}
+      - name: Fetch the main branch
+        run: git fetch origin main --depth=1
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -33,7 +35,7 @@ jobs:
           # Get branch name from the PR head ref and sanitize it
           branch_name="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" # e.g., dependabot/pip/requests-2.28.1
           sanitized_name=$(echo "$branch_name" | sed 's|/|_|g') # Replaces all '/' with '_'
-          fragment_name="${sanitized_name}.misc" # Construct fragment name, using .misc type
+          fragment_name="${sanitized_name}.misc.rst" # Construct fragment name, using .misc type
           fragment_path="${FRAGMENT_DIR}/${fragment_name}"
 
           # Get the first line of the commit message from the PR's head commit
