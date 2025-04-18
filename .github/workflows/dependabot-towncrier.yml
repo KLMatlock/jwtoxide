@@ -86,7 +86,7 @@ jobs:
           git add "${fragment_path}"
 
           echo "Committing fragment..."
-          git commit -m "chore: Add news fragment for Dependabot update" -m "[dependabot skip]" -m "[skip ci]"
+          git commit -m "chore: Add news fragment for Dependabot update" -m "[dependabot skip]"
 
           echo "Pushing changes to ${{ github.event.pull_request.head.ref }}..."
           # Push the commit back to the PR branch (origin is set by actions/checkout)
